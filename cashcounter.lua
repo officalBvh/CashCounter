@@ -1,13 +1,8 @@
--- Define the location of the drops
 local Drop = game.Workspace.Ignored:WaitForChild("Drop")
 
--- Initialize total cash variable
 local totalCash = 0
 
--- GUI setup function
 function setgui()
-    -- Gui to Lua
-    -- Version: 3.2
 
     -- Instances:
 
@@ -16,7 +11,6 @@ function setgui()
     local UICorner = Instance.new("UICorner")
     local TextLabel = Instance.new("TextLabel")
 
-    -- Properties:
 
     HermesGUI.Name = "HermesGUI"
     HermesGUI.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -47,13 +41,11 @@ function setgui()
     TextLabel.TextSize = 14.000
     TextLabel.TextWrapped = true
 
-    -- Make the frame draggable
     makeFrameDraggable(MainFrame)
 
     return TextLabel
 end
 
--- Function to make the frame draggable
 function makeFrameDraggable(frame)
     local UserInputService = game:GetService("UserInputService")
 
@@ -93,7 +85,6 @@ function makeFrameDraggable(frame)
     end)
 end
 
--- Function to create the GUI if it doesn't exist
 local function createGuiIfNeeded()
     local player = game.Players.LocalPlayer
     if not player:FindFirstChild("PlayerGui"):FindFirstChild("HermesGUI") then
@@ -101,15 +92,12 @@ local function createGuiIfNeeded()
     end
 end
 
--- Create the GUI and get the TextLabel reference
 local CashLabel = createGuiIfNeeded()
 
--- Function to update the CashLabel text
 local function updateCashLabel()
     CashLabel.Text = tostring(totalCash) .. "$"
 end
 
--- Function to extract numerical value from the text
 local function extractCashAmount(text)
     local amount = string.match(text, "%$%d+[,%.]?%d*")
     if amount then
@@ -120,9 +108,8 @@ local function extractCashAmount(text)
     end
 end
 
--- Function to update total cash
 local function updateTotalCash()
-    totalCash = 0 -- Reset total cash to recalculate
+    totalCash = 0
     for i, v in ipairs(Drop:GetChildren()) do
         if v:IsA("Part") and v.Name == "MoneyDrop" then
             local billboardGui = v:FindFirstChild("BillboardGui")
@@ -136,7 +123,6 @@ local function updateTotalCash()
     updateCashLabel()
 end
 
--- Connect the update function to the ChildAdded event
 Drop.ChildAdded:Connect(function(child)
     if child:IsA("Part") and child.Name == "MoneyDrop" then
         local billboardGui = child:WaitForChild("BillboardGui")
@@ -149,7 +135,6 @@ Drop.ChildAdded:Connect(function(child)
     end
 end)
 
--- Connect the update function to the ChildRemoved event
 Drop.ChildRemoved:Connect(function(child)
     if child:IsA("Part") and child.Name == "MoneyDrop" then
         local billboardGui = child:FindFirstChild("BillboardGui")
@@ -162,14 +147,13 @@ Drop.ChildRemoved:Connect(function(child)
     end
 end)
 
--- Handle character respawn to reapply the GUI
 game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
-    wait(1) -- Wait for the character to fully load
+    wait(1) 
     CashLabel = createGuiIfNeeded()
-    updateCashLabel() -- Update the label text with the current total cash
+    updateCashLabel() 
 end)
 
--- Initial update to account for existing drops
+
 updateTotalCash()
 
 
